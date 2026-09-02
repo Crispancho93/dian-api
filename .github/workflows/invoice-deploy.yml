@@ -1,0 +1,60 @@
+name: invoice-api-deploy
+
+on:
+  push:
+    branches: [ "feature/certificado-multi-empresa" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ghcr.io/crispancho93/invoice.api:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: k8s
+
+      - name: Copy k8s manifests to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST_CONTABO1 }}
+          username: ${{ secrets.USER_CONTABO1 }}
+          password: ${{ secrets.PASSWORD_CONTABO1 }}
+          source: "k8s/"
+          target: "/home/ubuntu/invoice-api/"
+
+      - name: Deploy to Kubernetes
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_CONTABO1 }}
+          username: ${{ secrets.USER_CONTABO1 }}
+          password: ${{ secrets.PASSWORD_CONTABO1 }}
+          script: |
+            cd /home/ubuntu/invoice-api/k8s
+            export GITHUB_TOKEN="${{ secrets.TOKEN_DEPLOY }}"
+            bash apply-invoice-api.sh

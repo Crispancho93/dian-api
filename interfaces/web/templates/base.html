@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Invoice API{% endblock %}</title>
+    <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+{% if current_user %}
+<header class="topbar">
+    <a class="brand" href="/">Invoice<strong>API</strong></a>
+    <nav>
+        <a href="/documentos">Documentos</a>
+        <a href="/clientes">Clientes</a>
+        <a href="/docs" target="_blank" rel="noopener">API</a>
+    </nav>
+    <div class="user">
+        <span>{{ current_user.name }}</span>
+        <a class="logout" href="/logout">Salir</a>
+    </div>
+</header>
+{% endif %}
+
+<main class="{% block main_class %}container{% endblock %}">
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    {% if mensaje %}<div class="alert alert-ok">{{ mensaje }}</div>{% endif %}
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Documento · Invoice API{% endblock %}
+
+{% block content %}
+<a class="btn btn-link" href="/documentos">← Volver a documentos</a>
+
+{% if documento %}
+<div class="section-head">
+    <h1>{{ tipos.get(documento.tipo, documento.tipo) }} {{ documento.numero }}</h1>
+    <span class="badge badge-{{ documento.estado|lower }}">{{ documento.estado }}</span>
+</div>
+
+<div class="card">
+    <dl class="detail-grid">
+        <dt>Fecha de envío</dt>
+        <dd>{{ documento.created_at.strftime('%Y-%m-%d %H:%M:%S') if documento.created_at else '-' }}</dd>
+
+        <dt>NIT emisor</dt>
+        <dd>{{ documento.cliente_nit }}</dd>
+
+        <dt>Resolución</dt>
+        <dd>{{ documento.resolucion or '-' }}</dd>
+
+        <dt>Identificador (CUFE/CUDS/CUNE)</dt>
+        <dd class="mono break">{{ documento.identificador or '-' }}</dd>
+
+        <dt>Ambiente</dt>
+        <dd>{{ documento.ambiente_nombre }}</dd>
+
+        {% if documento.zip_key %}
+        <dt>ZipKey</dt>
+        <dd class="mono break">{{ documento.zip_key }}</dd>
+        {% endif %}
+
+        <dt>Archivo enviado</dt>
+        <dd class="mono break">{{ documento.zip_path or '-' }}</dd>
+    </dl>
+
+    <div class="actions">
+        {% if zip_disponible %}
+        <a class="btn" href="/documentos/{{ documento.id }}/descargar">Descargar ZIP</a>
+        {% else %}
+        <span class="muted">El ZIP no está disponible en el servidor.</span>
+        {% endif %}
+
+        {% if documento.zip_key %}
+        <form method="post" action="/documentos/{{ documento.id }}/estado">
+            <button type="submit">Reconsultar estado en la DIAN</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<h2>Mensajes de la DIAN</h2>
+<div class="card">
+    {% if documento.mensajes %}
+    <pre class="messages">{{ documento.mensajes }}</pre>
+    {% else %}
+    <p class="muted">Sin mensajes.</p>
+    {% endif %}
+</div>
+
+<h2>Respuesta cruda</h2>
+<div class="card">
+    {% if documento.respuesta_dian %}
+    <details>
+        <summary>Ver XML de respuesta</summary>
+        <pre class="raw">{{ documento.respuesta_dian }}</pre>
+    </details>
+    {% else %}
+    <p class="muted">No se guardó respuesta (el envío falló antes de llegar a la DIAN).</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

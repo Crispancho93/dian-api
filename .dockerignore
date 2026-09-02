@@ -1,0 +1,11 @@
+.env
+.git
+.gitignore
+.github
+.vscode
+.trae
+__pycache__
+venv/
+k8s
+docs
+README.md

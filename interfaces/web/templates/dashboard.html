@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Tablero · Invoice API{% endblock %}
+
+{% block content %}
+<h1>Tablero</h1>
+
+<div class="stats">
+    <div class="stat">
+        <span class="stat-value">{{ total }}</span>
+        <span class="stat-label">Total enviados</span>
+    </div>
+    {% for estado, cantidad in conteos.items() %}
+    <div class="stat">
+        <span class="stat-value">{{ cantidad }}</span>
+        <span class="stat-label"><span class="badge badge-{{ estado|lower }}">{{ estado }}</span></span>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="section-head">
+    <h2>Últimos envíos</h2>
+    <a class="btn btn-link" href="/documentos">Ver todos</a>
+</div>
+
+{% if ultimos %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Número</th>
+            <th>NIT</th>
+            <th>Ambiente</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for doc in ultimos %}
+        <tr onclick="location.href='/documentos/{{ doc.id }}'">
+            <td>{{ doc.created_at.strftime('%Y-%m-%d %H:%M') if doc.created_at else '-' }}</td>
+            <td>{{ tipos.get(doc.tipo, doc.tipo) }}</td>
+            <td>{{ doc.numero }}</td>
+            <td>{{ doc.cliente_nit }}</td>
+            <td>{{ doc.ambiente_nombre }}</td>
+            <td><span class="badge badge-{{ doc.estado|lower }}">{{ doc.estado }}</span></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty">Todavía no hay documentos enviados.</p>
+{% endif %}
+{% endblock %}

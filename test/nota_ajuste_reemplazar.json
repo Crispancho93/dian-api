@@ -1,0 +1,119 @@
+{
+  "_comentario": [
+    "CORRECCIÓN de una nómina ya enviada (TipoNota 1 = Reemplazar).",
+    "Lleva el cuerpo COMPLETO de la nómina con los valores YA CORREGIDOS, más el",
+    "bloque Predecesor que identifica la nómina original que se está corrigiendo.",
+    "CUNEPred = el CUNE que devolvió /api/payroll/create_payroll al crear esa nómina.",
+    "El @Numero de este ajuste debe ser nuevo (no reutilizar uno ya enviado).",
+    "",
+    "POST a: http://localhost:8000/api/payroll/create_payroll_adjustment",
+    "curl -X POST http://localhost:8000/api/payroll/create_payroll_adjustment \\",
+    "  -H \"Content-Type: application/json\" -d @test/nota_ajuste_reemplazar.json"
+  ],
+
+  "TipoNota": "1",
+
+  "Predecesor": {
+    "NumeroPred": "NE5",
+    "CUNEPred": "74067f57d2dd53ec7a55af04c6c9e5efdaab65ebc32d18407e7d818c7c3596d968d4869d172fcc74474b5cd4b2e62a3f",
+    "FechaGenPred": "2024-02-01"
+  },
+
+  "Periodo": {
+    "FechaIngreso": "2020-01-15",
+    "FechaLiquidacionInicio": "2024-01-01",
+    "FechaLiquidacionFin": "2024-01-31",
+    "TiempoLaborado": "30",
+    "FechaGen": "2024-02-01"
+  },
+
+  "NumeroSecuenciaXML": {
+    "Prefijo": "NA",
+    "Consecutivo": "200",
+    "Numero": "NA200"
+  },
+
+  "LugarGeneracionXML": {
+    "Pais": "CO",
+    "DepartamentoEstado": "11",
+    "MunicipioCiudad": "11001",
+    "Idioma": "es"
+  },
+
+  "ProveedorXML": {
+    "RazonSocial": "ORBIS GLOBAL TECHNOLOGY",
+    "NIT": "901616617",
+    "DV": "7",
+    "SoftwareID": "7a376f67-222d-480b-9b46-73413c55401a"
+  },
+
+  "InformacionGeneral": {
+    "Version": "V1.0: Nota de Ajuste de Documento Soporte de Pago de Nómina Electrónica",
+    "Ambiente": "2",
+    "FechaGen": "2024-02-01",
+    "HoraGen": "10:00:00-05:00",
+    "PeriodoNomina": "5",
+    "TipoMoneda": "COP"
+  },
+
+  "Empleador": {
+    "RazonSocial": "ORBIS GLOBAL TECHNOLOGY",
+    "NIT": "901616617",
+    "DV": "7",
+    "Pais": "CO",
+    "DepartamentoEstado": "11",
+    "MunicipioCiudad": "11001",
+    "Direccion": "Calle 123 # 45-67"
+  },
+
+  "Trabajador": {
+    "TipoTrabajador": "01",
+    "SubTipoTrabajador": "00",
+    "AltoRiesgoPension": "false",
+    "TipoDocumento": "13",
+    "NumeroDocumento": "1015000000",
+    "PrimerApellido": "Perez",
+    "SegundoApellido": "Gomez",
+    "PrimerNombre": "Juan",
+    "OtrosNombres": "Carlos",
+    "LugarTrabajoPais": "CO",
+    "LugarTrabajoDepartamentoEstado": "11",
+    "LugarTrabajoMunicipioCiudad": "11001",
+    "LugarTrabajoDireccion": "Calle 123 # 45-67",
+    "SalarioIntegral": "false",
+    "TipoContrato": "2",
+    "Sueldo": "2000000.00"
+  },
+
+  "Pago": {
+    "Forma": "1",
+    "Metodo": "42",
+    "Banco": "Bancolombia",
+    "TipoCuenta": "AH",
+    "NumeroCuenta": "1234567890"
+  },
+
+  "FechasPagos": ["2024-01-31"],
+
+  "Devengados": {
+    "Basico": {
+      "DiasTrabajados": "30",
+      "SueldoTrabajado": "2000000.00"
+    },
+    "Transporte": [
+      { "AuxilioTransporte": "162000.00" }
+    ]
+  },
+
+  "Deducciones": {
+    "Salud": { "Porcentaje": "4.00", "Deduccion": "80000.00" },
+    "FondoPension": { "Porcentaje": "4.00", "Deduccion": "80000.00" }
+  },
+
+  "DevengadosTotal": "2162000.00",
+  "DeduccionesTotal": "160000.00",
+  "ComprobanteTotal": "2002000.00",
+
+  "Pin": "202677",
+  "TestID": "2909e1cc-f6ce-4a0f-9f3f-a0376007af27"
+}

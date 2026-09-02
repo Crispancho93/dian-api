@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Documentos · Invoice API{% endblock %}
+
+{% block content %}
+<div class="section-head">
+    <h1>Documentos</h1>
+    <span class="muted">{{ total }} resultado{{ '' if total == 1 else 's' }}</span>
+</div>
+
+<form class="filters card" method="get" action="/documentos">
+    <label>
+        Cliente
+        <select name="cliente_nit">
+            <option value="">Todos</option>
+            {% for cliente in clientes %}
+            <option value="{{ cliente.nit }}" {% if filtros.cliente_nit == cliente.nit %}selected{% endif %}>
+                {{ cliente.full_name }} ({{ cliente.nit }})
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Tipo
+        <select name="tipo">
+            <option value="">Todos</option>
+            {% for codigo, nombre in tipos.items() %}
+            <option value="{{ codigo }}" {% if filtros.tipo == codigo %}selected{% endif %}>{{ nombre }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Estado
+        <select name="estado">
+            <option value="">Todos</option>
+            {% for estado in estados %}
+            <option value="{{ estado }}" {% if filtros.estado == estado %}selected{% endif %}>{{ estado }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Desde
+        <input type="date" name="desde" value="{{ filtros.desde }}">
+    </label>
+
+    <label>
+        Hasta
+        <input type="date" name="hasta" value="{{ filtros.hasta }}">
+    </label>
+
+    <label class="grow">
+        Buscar
+        <input type="search" name="buscar" value="{{ filtros.buscar }}" placeholder="Número o CUFE/CUDS/CUNE">
+    </label>
+
+    <div class="filter-actions">
+        <button type="submit">Filtrar</button>
+        <a class="btn btn-link" href="/documentos">Limpiar</a>
+    </div>
+</form>
+
+{% if documentos %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Número</th>
+            <th>NIT</th>
+            <th>Identificador</th>
+            <th>Ambiente</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for doc in documentos %}
+        <tr onclick="location.href='/documentos/{{ doc.id }}'">
+            <td>{{ doc.created_at.strftime('%Y-%m-%d %H:%M') if doc.created_at else '-' }}</td>
+            <td>{{ tipos.get(doc.tipo, doc.tipo) }}</td>
+            <td>{{ doc.numero }}</td>
+            <td>{{ doc.cliente_nit }}</td>
+            <td class="mono truncate" title="{{ doc.identificador or '' }}">{{ doc.identificador or '-' }}</td>
+            <td>{{ doc.ambiente_nombre }}</td>
+            <td><span class="badge badge-{{ doc.estado|lower }}">{{ doc.estado }}</span></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% set qs = 'cliente_nit=' ~ filtros.cliente_nit ~ '&tipo=' ~ filtros.tipo ~ '&estado=' ~ filtros.estado ~ '&desde=' ~ filtros.desde ~ '&hasta=' ~ filtros.hasta ~ '&buscar=' ~ filtros.buscar %}
+    {% if page > 1 %}<a href="/documentos?{{ qs }}&page={{ page - 1 }}">← Anterior</a>{% endif %}
+    <span>Página {{ page }} de {{ total_pages }}</span>
+    {% if page < total_pages %}<a href="/documentos?{{ qs }}&page={{ page + 1 }}">Siguiente →</a>{% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<p class="empty">No hay documentos que coincidan con el filtro.</p>
+{% endif %}
+{% endblock %}

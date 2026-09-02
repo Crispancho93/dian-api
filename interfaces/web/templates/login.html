@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Ingresar · Invoice API{% endblock %}
+{% block main_class %}login-wrap{% endblock %}
+
+{% block content %}
+<form class="card login-card" method="post" action="/login">
+    <h1>Invoice<strong>API</strong></h1>
+    <p class="muted">Panel de facturación electrónica</p>
+
+    <label>
+        Correo
+        <input type="email" name="email" value="{{ email or '' }}" required autofocus>
+    </label>
+
+    <label>
+        Contraseña
+        <input type="password" name="password" required>
+    </label>
+
+    <input type="hidden" name="next" value="{{ next_url or '/' }}">
+
+    <button type="submit">Ingresar</button>
+</form>
+{% endblock %}

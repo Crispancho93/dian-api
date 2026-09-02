@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes · Invoice API{% endblock %}
+
+{% block content %}
+<div class="section-head">
+    <h1>Clientes</h1>
+    <a class="btn" href="/clientes/nuevo">Nuevo cliente</a>
+</div>
+
+<form class="filters card" method="get" action="/clientes">
+    <label class="grow">
+        Buscar
+        <input type="search" name="buscar" value="{{ buscar }}" placeholder="NIT, razón social o resolución">
+    </label>
+    <div class="filter-actions">
+        <button type="submit">Buscar</button>
+        <a class="btn btn-link" href="/clientes">Limpiar</a>
+    </div>
+</form>
+
+{% if clientes %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Razón social</th>
+            <th>NIT</th>
+            <th>Resolución</th>
+            <th>Certificado</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clientes %}
+        <tr onclick="location.href='/clientes/{{ cliente.id }}/editar'">
+            <td>{{ cliente.full_name }}</td>
+            <td>{{ cliente.nit }}{% if cliente.digito %}-{{ cliente.digito }}{% endif %}</td>
+            <td>{{ cliente.resolucion }}</td>
+            <td>
+                {% if cliente.tiene_certificado %}
+                <span class="badge badge-aceptado">Cargado</span>
+                {% else %}
+                <span class="badge badge-error">Sin certificado</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if cliente.is_active %}
+                <span class="badge badge-aceptado">Activo</span>
+                {% else %}
+                <span class="badge badge-rechazado">Inactivo</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty">No hay clientes cargados.</p>
+{% endif %}
+{% endblock %}

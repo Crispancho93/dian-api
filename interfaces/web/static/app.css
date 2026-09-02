@@ -1,0 +1,185 @@
+:root {
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --border: #dfe3e8;
+    --text: #1f2933;
+    --muted: #6b7885;
+    --accent: #1f6feb;
+    --accent-dark: #1a5fd0;
+    --ok: #1a7f42;
+    --ok-bg: #e4f5ea;
+    --err: #b42318;
+    --err-bg: #fdecea;
+    --warn: #8a5a00;
+    --warn-bg: #fdf3e2;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1 { font-size: 22px; margin: 24px 0 16px; }
+h2 { font-size: 17px; margin: 28px 0 12px; }
+
+/* ---------- Barra superior ---------- */
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+}
+.brand { font-size: 17px; color: var(--text); font-weight: 500; }
+.brand strong { color: var(--accent); }
+.topbar nav { display: flex; gap: 18px; flex: 1; }
+.topbar nav a { color: var(--muted); padding: 4px 0; }
+.topbar nav a:hover { color: var(--text); text-decoration: none; }
+.topbar .user { display: flex; align-items: center; gap: 12px; color: var(--muted); }
+.logout { color: var(--muted); }
+
+/* ---------- Layout ---------- */
+.container { max-width: 1160px; margin: 0 auto; padding: 0 24px 48px; }
+
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 24px 0 12px;
+}
+.section-head h1, .section-head h2 { margin: 0; }
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.muted { color: var(--muted); }
+.hint { color: var(--muted); font-size: 13px; }
+.empty { color: var(--muted); padding: 32px; text-align: center; background: var(--surface); border: 1px dashed var(--border); border-radius: 8px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+.break { word-break: break-all; }
+.truncate { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- Login ---------- */
+.login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+.login-card { width: 100%; max-width: 360px; }
+.login-card h1 { margin: 0; font-size: 24px; font-weight: 500; }
+.login-card h1 strong { color: var(--accent); }
+.login-card p { margin: 4px 0 20px; }
+
+/* ---------- Formularios ---------- */
+label { display: block; margin-bottom: 14px; font-size: 13px; color: var(--muted); }
+input, select {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+}
+input:focus, select:focus { outline: 2px solid rgba(31, 111, 235, .25); border-color: var(--accent); }
+label.check { display: flex; align-items: center; gap: 8px; color: var(--text); }
+label.check input { width: auto; margin: 0; }
+
+button, .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+}
+button:hover, .btn:hover { background: var(--accent-dark); text-decoration: none; }
+.btn-link { background: none; border-color: transparent; color: var(--accent); padding-left: 0; }
+.btn-link:hover { background: none; text-decoration: underline; }
+
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 16px; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 0 14px; align-items: flex-end; }
+.filters label { flex: 0 0 auto; min-width: 150px; }
+.filters label.grow { flex: 1 1 220px; }
+.filter-actions { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; }
+
+.actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+.actions form { margin: 0; }
+
+/* ---------- Tablas ---------- */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.table th, .table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+.table th { background: #fafbfc; color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr { cursor: pointer; }
+.table tbody tr:hover { background: #f7f9fc; }
+
+.detail-grid { display: grid; grid-template-columns: 220px 1fr; gap: 10px 16px; margin: 0; }
+.detail-grid dt { color: var(--muted); font-size: 13px; }
+.detail-grid dd { margin: 0; }
+
+/* ---------- Estados ---------- */
+.badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.badge-aceptado { background: var(--ok-bg); color: var(--ok); }
+.badge-rechazado { background: var(--err-bg); color: var(--err); }
+.badge-error { background: var(--err-bg); color: var(--err); }
+.badge-enviado { background: var(--warn-bg); color: var(--warn); }
+
+.alert { padding: 11px 14px; border-radius: 6px; margin: 18px 0; }
+.alert-error { background: var(--err-bg); color: var(--err); }
+.alert-ok { background: var(--ok-bg); color: var(--ok); }
+
+/* ---------- Estadísticas ---------- */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.stat-value { display: block; font-size: 26px; font-weight: 600; }
+.stat-label { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; }
+
+/* ---------- Bloques de texto ---------- */
+pre.messages, pre.raw {
+    margin: 0;
+    padding: 12px;
+    background: #f7f9fc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 420px;
+    overflow: auto;
+}
+details summary { cursor: pointer; color: var(--accent); margin-bottom: 10px; }
+
+.pagination { display: flex; gap: 16px; align-items: center; justify-content: center; padding: 18px; color: var(--muted); }

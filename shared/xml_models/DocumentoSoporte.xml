@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+   xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+   xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+   xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+   xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+   xmlns:sts="dian:gov:co:facturaelectronica:Structures-2-1"
+   xmlns:xades="http://uri.etsi.org/01903/v1.3.2#"
+   xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd">
+   <ext:UBLExtensions>
+      <ext:UBLExtension>
+         <ext:ExtensionContent>
+            <sts:DianExtensions>
+               <sts:InvoiceControl>
+                  <sts:InvoiceAuthorization>18760000001</sts:InvoiceAuthorization>
+                  <sts:AuthorizationPeriod>
+                     <cbc:StartDate>2019-01-19</cbc:StartDate>
+                     <cbc:EndDate>2030-01-19</cbc:EndDate>
+                  </sts:AuthorizationPeriod>
+                  <sts:AuthorizedInvoices>
+                     <sts:Prefix>SETP</sts:Prefix>
+                     <sts:From>990000000</sts:From>
+                     <sts:To>995000000</sts:To>
+                  </sts:AuthorizedInvoices>
+               </sts:InvoiceControl>
+               <sts:InvoiceSource>
+                  <cbc:IdentificationCode listAgencyID="6"
+                     listAgencyName="United Nations Economic Commission for Europe"
+                     listSchemeURI="urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.1">CO</cbc:IdentificationCode>
+                  </sts:InvoiceSource>
+               <sts:SoftwareProvider>
+                  <sts:ProviderID schemeAgencyID="195"
+                     schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)"
+                     schemeID="0" schemeName="31">800197268</sts:ProviderID>
+                  <sts:SoftwareID schemeAgencyID="195"
+                     schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">
+                     56f2ae4e-9812-4fad-9255-08fcfcd5ccb0</sts:SoftwareID>
+               </sts:SoftwareProvider>
+               <sts:SoftwareSecurityCode schemeAgencyID="195"
+                  schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">
+                  a8d18e4e5aa00b44a0b1f9ef413ad8215116bd3ce91730d580eaed795c83b5a32fe6f0823abc71400b3d59eb542b7de8</sts:SoftwareSecurityCode>
+               <sts:AuthorizationProvider>
+                  <sts:AuthorizationProviderID schemeAgencyID="195"
+                     schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)"
+                     schemeID="4" schemeName="31">800197268</sts:AuthorizationProviderID>
+               </sts:AuthorizationProvider>
+               <sts:QRCode />
+            </sts:DianExtensions>
+         </ext:ExtensionContent>
+      </ext:UBLExtension>
+      <ext:UBLExtension>
+         <ext:ExtensionContent></ext:ExtensionContent>
+      </ext:UBLExtension>
+   </ext:UBLExtensions>
+  <cbc:UBLVersionID>UBL 2.1</cbc:UBLVersionID>
+  <cbc:CustomizationID>10</cbc:CustomizationID>
+  <cbc:ProfileID>DIAN 2.1: documento soporte en adquisiciones efectuadas a no obligados a facturar.</cbc:ProfileID>
+  <cbc:ProfileExecutionID>1</cbc:ProfileExecutionID>
+  <cbc:ID>FDS361</cbc:ID>
+  <cbc:UUID schemeID="1" schemeName="CUDS-SHA384" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">a46c2d701f1b2c9f8500b1af3d823dc810d75dfed22a6c93a7142fc13c872ec599a208520f1fa2b92c83d9c4aa549a54</cbc:UUID>
+  <cbc:IssueDate>2025-11-07</cbc:IssueDate>
+  <cbc:IssueTime>00:00:00-05:00</cbc:IssueTime>
+  <cbc:DueDate>2026-01-14</cbc:DueDate>
+  <cbc:InvoiceTypeCode>05</cbc:InvoiceTypeCode>
+  <cbc:Note> Retefuente 70% $336506.17 ***  Neto a Pagar $4470724.83</cbc:Note>
+  <cbc:DocumentCurrencyCode>COP</cbc:DocumentCurrencyCode>
+  <cbc:LineCountNumeric>1</cbc:LineCountNumeric>
+  <cac:InvoicePeriod>
+      <cbc:StartDate>2019-05-01</cbc:StartDate>
+      <cbc:EndDate>2019-05-30</cbc:EndDate>
+   </cac:InvoicePeriod>
+  <cac:OrderReference>
+    <cbc:ID>2</cbc:ID>
+    <cbc:IssueDate>2025-11-07</cbc:IssueDate>
+  </cac:OrderReference>
+  <cac:AccountingSupplierParty>
+    <cbc:AdditionalAccountID schemeAgencyID="195">2</cbc:AdditionalAccountID>
+    <cac:Party>
+      <cac:PhysicalLocation>
+        <cac:Address>
+          <cbc:ID>11001</cbc:ID>
+          <cbc:CityName>Bogotá, D.C</cbc:CityName>
+          <cbc:PostalZone>111011</cbc:PostalZone>
+          <cbc:CountrySubentity>Bogotá</cbc:CountrySubentity>
+          <cbc:CountrySubentityCode>11</cbc:CountrySubentityCode>
+          <cac:AddressLine>
+            <cbc:Line>AV EL DORADO 100-80</cbc:Line>
+          </cac:AddressLine>
+          <cac:Country>
+            <cbc:IdentificationCode>CO</cbc:IdentificationCode>
+            <cbc:Name languageID="es">Colombia</cbc:Name>
+          </cac:Country>
+        </cac:Address>
+      </cac:PhysicalLocation>
+      <cac:PartyTaxScheme>
+        <cbc:RegistrationName>MARIA LUCIA GIRALDO GIRALDO</cbc:RegistrationName>
+        <cbc:CompanyID schemeID="6" schemeName="31" schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">23689250</cbc:CompanyID>
+        <cbc:TaxLevelCode listName="5">R-99-PN</cbc:TaxLevelCode>
+        <cac:TaxScheme>
+          <cbc:ID>ZZ</cbc:ID>
+          <cbc:Name>No aplica</cbc:Name>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>
+    </cac:Party>
+  </cac:AccountingSupplierParty>
+  <cac:AccountingCustomerParty>
+    <cbc:AdditionalAccountID schemeAgencyID="195">1</cbc:AdditionalAccountID>
+    <cac:Party>
+      <cac:PhysicalLocation>
+        <cac:Address>
+          <cbc:ID>11001</cbc:ID>
+          <cbc:CityName>Bogotá, D.C</cbc:CityName>
+          <cbc:PostalZone>11111</cbc:PostalZone>
+          <cbc:CountrySubentity>Bogotá</cbc:CountrySubentity>
+          <cbc:CountrySubentityCode>11</cbc:CountrySubentityCode>
+          <cac:AddressLine>
+            <cbc:Line>CRA 73 A # 55 - 40</cbc:Line>
+          </cac:AddressLine>
+          <cac:Country>
+            <cbc:IdentificationCode>CO</cbc:IdentificationCode>
+            <cbc:Name languageID="es">Colombia</cbc:Name>
+          </cac:Country>
+        </cac:Address>
+      </cac:PhysicalLocation>
+      <cac:PartyTaxScheme>
+        <cbc:RegistrationName>GRUPO MIO SAS</cbc:RegistrationName>
+        <cbc:CompanyID schemeID="6" schemeName="31" schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">901099671</cbc:CompanyID>
+        <cbc:TaxLevelCode listName="48">R-99-PN</cbc:TaxLevelCode>
+        <cac:TaxScheme>
+          <cbc:ID>01</cbc:ID>
+          <cbc:Name>IVA</cbc:Name>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>
+    </cac:Party>
+  </cac:AccountingCustomerParty>
+  <cac:PaymentMeans>
+    <cbc:ID>2</cbc:ID>
+    <cbc:PaymentMeansCode>10</cbc:PaymentMeansCode>
+    <cbc:PaymentDueDate>2026-01-14</cbc:PaymentDueDate>
+    <cbc:PaymentID>Efectivo</cbc:PaymentID>
+  </cac:PaymentMeans>
+  <cac:LegalMonetaryTotal>
+    <cbc:LineExtensionAmount currencyID="COP">4807231.00</cbc:LineExtensionAmount>
+    <cbc:TaxExclusiveAmount currencyID="COP">0.00</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="COP">4807231.00</cbc:TaxInclusiveAmount>
+    <cbc:AllowanceTotalAmount currencyID="COP">0.00</cbc:AllowanceTotalAmount>
+    <cbc:ChargeTotalAmount currencyID="COP">0.00</cbc:ChargeTotalAmount>
+    <cbc:PayableAmount currencyID="COP">4807231.00</cbc:PayableAmount>
+  </cac:LegalMonetaryTotal>
+  
+</Invoice>

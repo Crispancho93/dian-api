@@ -1,0 +1,161 @@
+{
+  "_comentario": [
+    "Nómina de varios empleados. La DIAN NO tiene envío por lote: /Trabajador es 1-1",
+    "y SendNominaSync transmite 1 documento por zip. Cada empleado de la lista se",
+    "convierte en un documento independiente, con su propio @Numero y su propio CUNE.",
+    "Los consecutivos se asignan correlativos desde 'consecutivo_inicial'.",
+    "Si no se indican Salud/FondoPension se calculan al 4% del sueldo, y los totales",
+    "se cuadran solos. Correr con:  python test/enviar_nomina_lote.py"
+  ],
+
+  "prefijo": "NE",
+  "consecutivo_inicial": 100,
+
+  "comunes": {
+    "Periodo": {
+      "FechaIngreso": "2020-01-15",
+      "FechaLiquidacionInicio": "2024-01-01",
+      "FechaLiquidacionFin": "2024-01-31",
+      "TiempoLaborado": "30",
+      "FechaGen": "2024-02-01"
+    },
+    "LugarGeneracionXML": {
+      "Pais": "CO",
+      "DepartamentoEstado": "11",
+      "MunicipioCiudad": "11001",
+      "Idioma": "es"
+    },
+    "ProveedorXML": {
+      "RazonSocial": "ORBIS GLOBAL TECHNOLOGY",
+      "NIT": "901616617",
+      "DV": "7",
+      "SoftwareID": "7a376f67-222d-480b-9b46-73413c55401a"
+    },
+    "InformacionGeneral": {
+      "Version": "V1.0: Documento Soporte de Pago de Nómina Electrónica",
+      "Ambiente": "2",
+      "FechaGen": "2024-02-01",
+      "HoraGen": "10:00:00-05:00",
+      "PeriodoNomina": "5",
+      "TipoMoneda": "COP"
+    },
+    "Empleador": {
+      "RazonSocial": "ORBIS GLOBAL TECHNOLOGY",
+      "NIT": "901616617",
+      "DV": "7",
+      "Pais": "CO",
+      "DepartamentoEstado": "11",
+      "MunicipioCiudad": "11001",
+      "Direccion": "Calle 123 # 45-67"
+    },
+    "Pago": {
+      "Forma": "1",
+      "Metodo": "42",
+      "Banco": "Bancolombia",
+      "TipoCuenta": "AH",
+      "NumeroCuenta": "1234567890"
+    },
+    "FechasPagos": ["2024-01-31"],
+    "Pin": "202677",
+    "TestID": "2909e1cc-f6ce-4a0f-9f3f-a0376007af27"
+  },
+
+  "empleados": [
+    {
+      "NumeroDocumento": "1015000001",
+      "PrimerApellido": "Perez",
+      "SegundoApellido": "Gomez",
+      "PrimerNombre": "Juan",
+      "OtrosNombres": "Carlos",
+      "Sueldo": "2000000.00",
+      "DiasTrabajados": "30",
+      "AuxilioTransporte": "162000.00"
+    },
+    {
+      "NumeroDocumento": "1015000002",
+      "PrimerApellido": "Gomez",
+      "PrimerNombre": "Maria",
+      "Sueldo": "1800000.00",
+      "DiasTrabajados": "30",
+      "AuxilioTransporte": "162000.00"
+    },
+    {
+      "NumeroDocumento": "1015000003",
+      "PrimerApellido": "Rodriguez",
+      "PrimerNombre": "Carlos",
+      "Sueldo": "2500000.00",
+      "DiasTrabajados": "30",
+      "AuxilioTransporte": "162000.00",
+      "_nota": "ejemplo con horas extra diurnas (25%)",
+      "HorasExtraDiurnas": [
+        {
+          "HoraInicio": "2024-01-15T18:00:00",
+          "HoraFin": "2024-01-15T20:00:00",
+          "Cantidad": "2",
+          "Porcentaje": "25.00",
+          "Pago": "26041.00"
+        }
+      ]
+    },
+    {
+      "NumeroDocumento": "1015000004",
+      "PrimerApellido": "Martinez",
+      "PrimerNombre": "Ana",
+      "Sueldo": "1500000.00",
+      "DiasTrabajados": "30",
+      "AuxilioTransporte": "162000.00"
+    },
+    {
+      "NumeroDocumento": "1015000005",
+      "PrimerApellido": "Lopez",
+      "PrimerNombre": "Pedro",
+      "Sueldo": "3000000.00",
+      "DiasTrabajados": "30",
+      "_nota": "sueldo alto: sin auxilio de transporte"
+    },
+    {
+      "NumeroDocumento": "1015000006",
+      "PrimerApellido": "Garcia",
+      "PrimerNombre": "Laura",
+      "Sueldo": "1400000.00",
+      "DiasTrabajados": "30",
+      "AuxilioTransporte": "162000.00"
+    },
+    {
+      "NumeroDocumento": "1015000007",
+      "PrimerApellido": "Torres",
+      "PrimerNombre": "Diego",
+      "Sueldo": "2200000.00",
+      "DiasTrabajados": "30",
+      "AuxilioTransporte": "162000.00"
+    },
+    {
+      "NumeroDocumento": "1015000008",
+      "PrimerApellido": "Ramirez",
+      "PrimerNombre": "Sofia",
+      "Sueldo": "1600000.00",
+      "DiasTrabajados": "15",
+      "AuxilioTransporte": "81000.00",
+      "_nota": "medio mes trabajado",
+      "SueldoTrabajado": "800000.00"
+    },
+    {
+      "NumeroDocumento": "1015000009",
+      "PrimerApellido": "Herrera",
+      "PrimerNombre": "Andres",
+      "Sueldo": "2800000.00",
+      "DiasTrabajados": "30"
+    },
+    {
+      "NumeroDocumento": "1015000010",
+      "PrimerApellido": "Castro",
+      "PrimerNombre": "Valentina",
+      "Sueldo": "1300000.00",
+      "DiasTrabajados": "30",
+      "AuxilioTransporte": "162000.00",
+      "_nota": "deducciones explícitas en vez de calcularlas al 4%",
+      "Salud": "52000.00",
+      "FondoPension": "52000.00"
+    }
+  ]
+}

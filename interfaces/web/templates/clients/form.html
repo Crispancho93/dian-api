@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar cliente' if cliente else 'Nuevo cliente' }} · Invoice API{% endblock %}
+
+{% block content %}
+{# `datos` unifica el cliente guardado y lo que el usuario acababa de escribir
+   cuando el guardado falló, para no perder el formulario. #}
+{% set datos = cliente or form %}
+
+<a class="btn btn-link" href="/clientes">← Volver a clientes</a>
+
+<h1>{{ 'Editar cliente' if cliente else 'Nuevo cliente' }}</h1>
+
+<form class="card" method="post" action="/clientes/guardar">
+    <input type="hidden" name="client_id" value="{{ datos.id if datos else '' }}">
+
+    <div class="form-grid">
+        <label>
+            Razón social
+            <input type="text" name="full_name" value="{{ datos.full_name if datos else '' }}" required>
+        </label>
+
+        <label>
+            NIT
+            <input type="text" name="nit" value="{{ datos.nit if datos else '' }}" required>
+        </label>
+
+        <label>
+            Dígito de verificación
+            <input type="text" name="digito" maxlength="2" value="{{ datos.digito if datos else '' }}">
+        </label>
+
+        <label>
+            Resolución
+            <input type="text" name="resolucion" value="{{ datos.resolucion if datos else '' }}" required>
+        </label>
+
+        <label class="check">
+            <input type="checkbox" name="is_active" value="1"
+                   {% if not datos or datos.is_active %}checked{% endif %}>
+            Cliente activo
+        </label>
+    </div>
+
+    <button type="submit">Guardar cliente</button>
+</form>
+
+{% if cliente %}
+<h2>Certificado digital</h2>
+<div class="card">
+    <p class="muted">
+        {% if cliente.tiene_certificado %}
+        Certificado actual: <span class="mono break">{{ cliente.pfx_path }}</span>
+        {% else %}
+        Este cliente todavía no tiene certificado cargado. Sin certificado no puede firmar documentos.
+        {% endif %}
+    </p>
+
+    <form method="post" action="/clientes/{{ cliente.id }}/certificado" enctype="multipart/form-data">
+        <div class="form-grid">
+            <label>
+                Archivo .pfx
+                <input type="file" name="certificado" accept=".pfx,.p12" required>
+            </label>
+
+            <label>
+                Clave del certificado
+                <input type="password" name="pfx_password" required>
+            </label>
+        </div>
+
+        <p class="hint">
+            El certificado se valida con la clave antes de guardarse: si la clave no corresponde,
+            no se guarda nada. La clave se almacena encriptada.
+        </p>
+
+        <button type="submit">Cargar certificado</button>
+    </form>
+</div>
+{% else %}
+<p class="hint">Guardá el cliente primero para poder cargarle el certificado.</p>
+{% endif %}
+{% endblock %}
