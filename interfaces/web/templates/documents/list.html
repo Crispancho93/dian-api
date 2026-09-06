@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="section-head">
-    <h1>Documentos</h1>
+    <h1>Documentos....</h1>
     <span class="muted">{{ total }} resultado{{ '' if total == 1 else 's' }}</span>
 </div>
 
@@ -69,6 +69,7 @@
             <th>Fecha</th>
             <th>Tipo</th>
             <th>Número</th>
+            <th>Cliente</th>
             <th>NIT</th>
             <th>Identificador</th>
             <th>Ambiente</th>
@@ -81,6 +82,7 @@
             <td>{{ doc.created_at.strftime('%Y-%m-%d %H:%M') if doc.created_at else '-' }}</td>
             <td>{{ tipos.get(doc.tipo, doc.tipo) }}</td>
             <td>{{ doc.numero }}</td>
+            <td>{{ clientes_por_nit.get(doc.cliente_nit, 'Sin cliente') }}</td>
             <td>{{ doc.cliente_nit }}</td>
             <td class="mono truncate" title="{{ doc.identificador or '' }}">{{ doc.identificador or '-' }}</td>
             <td>{{ doc.ambiente_nombre }}</td>
@@ -91,11 +93,37 @@
 </table>
 
 {% if total_pages > 1 %}
+{% set qs = 'cliente_nit=' ~ filtros.cliente_nit ~ '&tipo=' ~ filtros.tipo ~ '&estado=' ~ filtros.estado ~ '&desde=' ~ filtros.desde ~ '&hasta=' ~ filtros.hasta ~ '&buscar=' ~ filtros.buscar %}
+{% set start_page = [1, page - 2] | max %}
+{% set end_page = [total_pages, page + 2] | min %}
+{% set page_window = range(start_page, end_page + 1) %}
+
 <div class="pagination">
-    {% set qs = 'cliente_nit=' ~ filtros.cliente_nit ~ '&tipo=' ~ filtros.tipo ~ '&estado=' ~ filtros.estado ~ '&desde=' ~ filtros.desde ~ '&hasta=' ~ filtros.hasta ~ '&buscar=' ~ filtros.buscar %}
-    {% if page > 1 %}<a href="/documentos?{{ qs }}&page={{ page - 1 }}">← Anterior</a>{% endif %}
-    <span>Página {{ page }} de {{ total_pages }}</span>
-    {% if page < total_pages %}<a href="/documentos?{{ qs }}&page={{ page + 1 }}">Siguiente →</a>{% endif %}
+    {% if page > 1 %}
+    <a href="/documentos?{{ qs }}&page={{ page - 1 }}">← Anterior</a>
+    {% endif %}
+
+    {% if start_page > 1 %}
+    <a href="/documentos?{{ qs }}&page=1">1</a>
+    {% if start_page > 2 %}<span class="muted">…</span>{% endif %}
+    {% endif %}
+
+    {% for p in page_window %}
+    {% if p == page %}
+    <span class="current">{{ p }}</span>
+    {% else %}
+    <a href="/documentos?{{ qs }}&page={{ p }}">{{ p }}</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if end_page < total_pages %}
+    {% if end_page < total_pages - 1 %}<span class="muted">…</span>{% endif %}
+    <a href="/documentos?{{ qs }}&page={{ total_pages }}">{{ total_pages }}</a>
+    {% endif %}
+
+    {% if page < total_pages %}
+    <a href="/documentos?{{ qs }}&page={{ page + 1 }}">Siguiente →</a>
+    {% endif %}
 </div>
 {% endif %}
 

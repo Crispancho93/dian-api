@@ -24,10 +24,11 @@ def list_documents(
     hasta: str = Query(""),
     buscar: str = Query(""),
     page: int = Query(1),
+    page_size: int = Query(30, ge=1, le=30),
     user=Depends(require_login),
 ):
     """Listado de documentos enviados, con filtros y paginación."""
-    page_size = 50
+    page_size = max(1, min(int(page_size or 30), 30))
     filtros = {
         "cliente_nit": cliente_nit,
         "tipo": tipo,
@@ -47,6 +48,7 @@ def list_documents(
         documentos, total, clientes = [], 0, []
         error = f"No se pudo consultar los documentos: {e}"
 
+    clientes_por_nit = {cliente.nit: cliente.full_name for cliente in clientes}
     total_pages = max(1, (total + page_size - 1) // page_size)
 
     return render(
@@ -55,6 +57,7 @@ def list_documents(
         {
             "documentos": documentos,
             "clientes": clientes,
+            "clientes_por_nit": clientes_por_nit,
             "filtros": filtros,
             "tipos": TIPOS,
             "estados": ESTADOS,
