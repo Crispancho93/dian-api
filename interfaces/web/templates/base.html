@@ -10,14 +10,22 @@
 {% if current_user %}
 <header class="topbar">
     <a class="brand" href="/">Invoice<strong>API</strong></a>
-    <nav>
+
+    <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav class="main-nav">
         <a href="/documentos">Documentos</a>
         <a href="/clientes">Clientes</a>
         <a href="/docs" target="_blank" rel="noopener">API</a>
+        <a href="/logout">Salir</a>
     </nav>
+
     <div class="user">
         <span>{{ current_user.name }}</span>
-        <a class="logout" href="/logout">Salir</a>
     </div>
 </header>
 {% endif %}
@@ -27,5 +35,17 @@
     {% if mensaje %}<div class="alert alert-ok">{{ mensaje }}</div>{% endif %}
     {% block content %}{% endblock %}
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const topbar = document.querySelector('.topbar');
+        const menuToggle = document.querySelector('.menu-toggle');
+        if (!topbar || !menuToggle) return;
+
+        menuToggle.addEventListener('click', function () {
+            const isOpen = topbar.classList.toggle('open');
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
+        });
+    });
+</script>
 </body>
 </html>
