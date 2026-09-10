@@ -133,6 +133,53 @@ button, .btn {
 button:hover, .btn:hover { background: var(--accent-dark); text-decoration: none; }
 .btn-link { background: none; border-color: transparent; color: var(--accent); padding-left: 0; }
 .btn-link:hover { background: none; text-decoration: underline; }
+.btn-danger {
+    padding: 5.6px 11.2px;
+    font-size: 9.8px;
+    background: var(--err);
+    border-color: var(--err);
+}
+.btn-danger:hover { background: #8f1d14; border-color: #8f1d14; }
+.btn-secondary { background: var(--surface); border-color: var(--border); color: var(--text); }
+.btn-secondary:hover { background: #f4f6f8; }
+
+.modal-backdrop[hidden] { display: none; }
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(15, 23, 42, .48);
+}
+.confirm-modal {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 14px;
+    width: min(100%, 430px);
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 18px 50px rgba(15, 23, 42, .22);
+}
+.confirm-icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--err-bg);
+    color: var(--err);
+    font-size: 20px;
+    font-weight: 700;
+}
+.error-icon { background: var(--err-bg); color: var(--err); }
+.confirm-copy h2 { margin: 0; font-size: 18px; }
+.confirm-copy p { margin: 4px 0 0; color: var(--muted); }
+.confirm-actions { grid-column: 2; display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.confirm-actions .confirm-delete { padding: 8px 14px; font-size: 13px; }
 
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 16px; }
 
@@ -162,6 +209,7 @@ button:hover, .btn:hover { background: var(--accent-dark); text-decoration: none
 
 .actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
 .actions form { margin: 0; }
+.table td form { margin: 0; }
 
 /* ---------- Tablas ---------- */
 .table {

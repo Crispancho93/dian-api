@@ -3,6 +3,10 @@ BEGIN;
 CREATE UNIQUE INDEX IF NOT EXISTS ux_client_nit
 ON client (nit);
 
+-- La tabla client debe tener NIT único porque es la columna referenciada.
+CREATE UNIQUE INDEX IF NOT EXISTS ux_client_nit
+ON client (nit);
+
 ALTER TABLE document
   ADD CONSTRAINT fk_document_cliente
   FOREIGN KEY (cliente_nit)

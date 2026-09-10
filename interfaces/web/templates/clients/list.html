@@ -28,6 +28,7 @@
             <th>Resolución</th>
             <th>Certificado</th>
             <th>Estado</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -50,11 +51,30 @@
                 <span class="badge badge-rechazado">Inactivo</span>
                 {% endif %}
             </td>
+            <td>
+                <form method="post" action="/clientes/{{ cliente.id }}/eliminar" data-confirm-delete onclick="event.stopPropagation()">
+                    <button class="btn btn-danger" type="submit">Eliminar</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 {% else %}
 <p class="empty">No hay clientes cargados.</p>
+{% endif %}
+{% if error_modal %}
+<div class="modal-backdrop" data-error-modal>
+    <section class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="error-title">
+        <div class="confirm-icon error-icon" aria-hidden="true">!</div>
+        <div class="confirm-copy">
+            <h2 id="error-title">No se puede eliminar el cliente</h2>
+            <p>{{ error_modal }}</p>
+        </div>
+        <div class="confirm-actions">
+            <button class="btn" type="button" data-close-error>Entendido</button>
+        </div>
+    </section>
+</div>
 {% endif %}
 {% endblock %}

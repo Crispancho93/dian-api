@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, Text, DateTime, func
+from sqlalchemy import ForeignKey, Table, Column, Integer, String, Text, DateTime, func
 
 from .db import meta
 
@@ -43,7 +43,13 @@ document = Table(
     Column("id", Integer, primary_key=True, autoincrement=True, doc="Identificador único del registro."),
     Column("tipo", String(10), nullable=False, doc="Tipo de documento (FV, NC, DS, NAS, NI, NIA)."),
     Column("numero", String(100), nullable=False, doc="Número del documento (prefijo + consecutivo)."),
-    Column("cliente_nit", String(50), nullable=False, doc="NIT del emisor."),
+    Column(
+        "cliente_nit",
+        String(50),
+        ForeignKey("client.nit", ondelete="RESTRICT"),
+        nullable=False,
+        doc="NIT del emisor.",
+    ),
     Column("resolucion", String(50), nullable=True, doc="Resolución del emisor. Nulo en nómina."),
     Column("identificador", String(200), nullable=True, doc="CUFE / CUDE / CUDS / CUNE del documento."),
     Column("ambiente", String(1), nullable=False, doc="Ambiente DIAN: 1 producción, 2 habilitación."),

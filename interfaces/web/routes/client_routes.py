@@ -1,9 +1,12 @@
+from urllib.parse import quote_plus
+
 from fastapi import APIRouter, Request, Depends, Form, File, UploadFile, Query
 from fastapi.responses import RedirectResponse
 
 from application.use_cases.client.list_clients_case import ListClientsCase, GetClientCase
 from application.use_cases.client.save_client_case import SaveClientCase
 from application.use_cases.client.save_certificate_case import SaveCertificateCase
+from application.use_cases.client.delete_client_case import DeleteClientCase
 from ..deps import require_login
 from ..templating import render
 
@@ -15,19 +18,25 @@ def list_clients(
     request: Request,
     buscar: str = Query(""),
     mensaje: str = Query(""),
+    error: str = Query(""),
     user=Depends(require_login),
 ):
     """Listado de clientes con el estado de su certificado."""
     try:
         clientes = ListClientsCase(buscar=buscar).execute()
-        error = None
     except Exception as e:
         clientes, error = [], f"No se pudo consultar los clientes: {e}"
 
     return render(
         request,
         "clients/list.html",
-        {"clientes": clientes, "buscar": buscar, "mensaje": mensaje, "error": error},
+        {
+            "clientes": clientes,
+            "buscar": buscar,
+            "mensaje": mensaje,
+            "error": None,
+            "error_modal": error,
+        },
     )
 
 
@@ -103,6 +112,25 @@ def save_client(
 
     return RedirectResponse(
         url=f"/clientes/{cliente.id}/editar?mensaje=Cliente+guardado", status_code=303
+    )
+
+
+@router.post("/{client_id}/eliminar")
+def delete_client(client_id: int, user=Depends(require_login)):
+    """Elimina un cliente sin documentos asociados."""
+    try:
+        DeleteClientCase(client_id).execute()
+    except LookupError:
+        return RedirectResponse(
+            url="/clientes?error=El+cliente+no+existe", status_code=303
+        )
+    except ValueError as e:
+        return RedirectResponse(
+            url=f"/clientes?error={quote_plus(str(e))}", status_code=303
+        )
+
+    return RedirectResponse(
+        url="/clientes?mensaje=Cliente+eliminado", status_code=303
     )
 
 

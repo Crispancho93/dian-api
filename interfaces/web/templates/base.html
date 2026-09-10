@@ -31,19 +31,83 @@
 {% endif %}
 
 <main class="{% block main_class %}container{% endblock %}">
-    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
-    {% if mensaje %}<div class="alert alert-ok">{{ mensaje }}</div>{% endif %}
+    {% if error and not error_modal %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    {% if mensaje %}<div class="alert alert-ok" data-auto-dismiss>{{ mensaje }}</div>{% endif %}
     {% block content %}{% endblock %}
 </main>
+<div class="modal-backdrop" data-delete-modal hidden>
+    <section class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <div class="confirm-icon" aria-hidden="true">!</div>
+        <div class="confirm-copy">
+            <h2 id="confirm-title">Eliminar cliente</h2>
+            <p>¿Está seguro de eliminar este cliente? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="confirm-actions">
+            <button class="btn btn-secondary" type="button" data-cancel-delete>Cancelar</button>
+            <button class="btn btn-danger confirm-delete" type="button" data-accept-delete>Eliminar cliente</button>
+        </div>
+    </section>
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const topbar = document.querySelector('.topbar');
         const menuToggle = document.querySelector('.menu-toggle');
-        if (!topbar || !menuToggle) return;
+        if (topbar && menuToggle) {
+            menuToggle.addEventListener('click', function () {
+                const isOpen = topbar.classList.toggle('open');
+                menuToggle.setAttribute('aria-expanded', String(isOpen));
+            });
+        }
 
-        menuToggle.addEventListener('click', function () {
-            const isOpen = topbar.classList.toggle('open');
-            menuToggle.setAttribute('aria-expanded', String(isOpen));
+        const modal = document.querySelector('[data-delete-modal]');
+        const cancelDelete = document.querySelector('[data-cancel-delete]');
+        const acceptDelete = document.querySelector('[data-accept-delete]');
+        const errorModal = document.querySelector('[data-error-modal]');
+        const closeError = document.querySelector('[data-close-error]');
+        const autoDismissAlert = document.querySelector('[data-auto-dismiss]');
+        let pendingDeleteForm = null;
+
+        if (autoDismissAlert) {
+            window.setTimeout(function () {
+                autoDismissAlert.remove();
+            }, 10000);
+        }
+
+        function closeDeleteModal() {
+            modal.hidden = true;
+            pendingDeleteForm = null;
+        }
+
+        document.querySelectorAll('[data-confirm-delete]').forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                pendingDeleteForm = form;
+                modal.hidden = false;
+                cancelDelete.focus();
+            });
+        });
+
+        if (modal) {
+            cancelDelete.addEventListener('click', closeDeleteModal);
+            acceptDelete.addEventListener('click', function () {
+                if (pendingDeleteForm) pendingDeleteForm.submit();
+            });
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) closeDeleteModal();
+            });
+        }
+        if (errorModal) {
+            closeError.addEventListener('click', function () {
+                errorModal.hidden = true;
+            });
+            errorModal.addEventListener('click', function (event) {
+                if (event.target === errorModal) errorModal.hidden = true;
+            });
+        }
+        document.addEventListener('keydown', function (event) {
+            if (event.key !== 'Escape') return;
+            if (modal && !modal.hidden) closeDeleteModal();
+            if (errorModal && !errorModal.hidden) errorModal.hidden = true;
         });
     });
 </script>

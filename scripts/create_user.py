@@ -33,7 +33,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # importa `domain.entities.db` primero, se dispara un import circular del
 # proyecto (shared -> certificate -> use_cases -> xml_models -> shared).
 from application.use_cases.user.create_user_case import CreateUserCase  # noqa: E402
-from sqlalchemy import select, insert, delete  # noqa: E402
+from sqlalchemy import select, insert, delete, text  # noqa: E402
 
 from domain.entities.db import engine, meta, get_connection  # noqa: E402
 from domain.entities.client import client  # noqa: E402
@@ -119,6 +119,60 @@ def crear_tablas():
     for tabla in tablas:
         estado = "ya existía" if tabla.name in existentes else "CREADA"
         print(f"  {tabla.name:<10} {estado}")
+
+    asegurar_relacion_cliente_documento()
+
+
+def asegurar_relacion_cliente_documento():
+    """Garantiza que ningún documento pueda dejar huérfano a su cliente."""
+    from sqlalchemy import inspect
+
+    inspector = inspect(engine)
+    indices = inspector.get_indexes("client")
+    restricciones = inspector.get_unique_constraints("client")
+    tiene_nit_unico = any(
+        indice.get("unique") and indice.get("column_names") == ["nit"]
+        for indice in indices
+    ) or any(
+        restriccion.get("column_names") == ["nit"]
+        for restriccion in restricciones
+    )
+
+    with get_connection() as conn:
+        if not tiene_nit_unico:
+            conn.execute(text("CREATE UNIQUE INDEX ux_client_nit ON client (nit)"))
+            print("  ux_client_nit creada")
+
+        huerfanos = conn.execute(
+            select(document.c.cliente_nit)
+            .select_from(document.outerjoin(client, document.c.cliente_nit == client.c.nit))
+            .where(client.c.id.is_(None))
+            .distinct()
+            .limit(10)
+        ).scalars().all()
+        if huerfanos:
+            raise RuntimeError(
+                "No se puede crear la llave foránea: existen documentos sin cliente "
+                f"(NIT: {', '.join(huerfanos)})"
+            )
+
+        foreign_keys = inspector.get_foreign_keys("document")
+        tiene_fk = any(
+            fk.get("referred_table") == "client"
+            and fk.get("constrained_columns") == ["cliente_nit"]
+            and fk.get("referred_columns") == ["nit"]
+            for fk in foreign_keys
+        )
+        if not tiene_fk:
+            conn.execute(text(
+                "ALTER TABLE document "
+                "ADD CONSTRAINT fk_document_cliente "
+                "FOREIGN KEY (cliente_nit) REFERENCES client (nit) "
+                "ON UPDATE CASCADE ON DELETE RESTRICT"
+            ))
+            print("  fk_document_cliente creada")
+
+        conn.commit()
 
 
 def crear_usuario(email: str, password: str, name: str):
