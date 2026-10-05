@@ -28,7 +28,7 @@
             <th>Resolución</th>
             <th>Certificado</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th class="client-actions-heading">Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -51,10 +51,15 @@
                 <span class="badge badge-rechazado">Inactivo</span>
                 {% endif %}
             </td>
-            <td>
-                <form method="post" action="/clientes/{{ cliente.id }}/eliminar" data-confirm-delete onclick="event.stopPropagation()">
-                    <button class="btn btn-danger" type="submit">Eliminar</button>
-                </form>
+            <td class="client-actions-cell" data-label="Acciones">
+                <details class="client-actions-menu" onclick="event.stopPropagation()">
+                    <summary aria-label="Acciones para {{ cliente.full_name }}" title="Acciones">
+                        <span></span><span></span><span></span>
+                    </summary>
+                    <form method="post" action="/clientes/{{ cliente.id }}/eliminar" data-confirm-delete>
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </details>
             </td>
         </tr>
         {% endfor %}

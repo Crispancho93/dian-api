@@ -211,6 +211,66 @@ button:hover, .btn:hover { background: var(--accent-dark); text-decoration: none
 .actions form { margin: 0; }
 .table td form { margin: 0; }
 
+.client-actions-heading,
+.client-actions-cell { text-align: right !important; }
+.client-actions-menu {
+    position: relative;
+    display: inline-block;
+    text-align: left;
+}
+.client-actions-menu summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    width: 34px;
+    height: 34px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: var(--muted);
+    cursor: pointer;
+    list-style: none;
+}
+.client-actions-menu summary span {
+    display: block;
+    width: 15px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+}
+.client-actions-menu summary::-webkit-details-marker { display: none; }
+.client-actions-menu summary:hover,
+.client-actions-menu[open] summary {
+    background: #f4f6f8;
+    border-color: var(--border);
+    color: var(--text);
+}
+.client-actions-menu form {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    z-index: 10;
+    min-width: 96px;
+    padding: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, .14);
+}
+.client-actions-menu form button {
+    width: 100%;
+    padding: 5px 7px;
+    border: 0;
+    background: transparent;
+    color: var(--err);
+    text-align: left;
+    font-size: 12px;
+}
+.client-actions-menu form button:hover {
+    background: var(--err-bg);
+}
+
 /* ---------- Tablas ---------- */
 .table {
     width: 100%;
@@ -218,7 +278,7 @@ button:hover, .btn:hover { background: var(--accent-dark); text-decoration: none
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
 }
 .table th, .table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
 .table th { background: #fafbfc; color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
@@ -395,6 +455,10 @@ details summary { cursor: pointer; color: var(--accent); margin-bottom: 10px; }
 
     .table tbody tr td:last-child {
         border-bottom: none;
+    }
+
+    .table tbody tr td.client-actions-cell {
+        justify-content: space-between;
     }
 
     .table tbody tr td::before {
