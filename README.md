@@ -64,9 +64,10 @@ Puesta en marcha, con un solo comando:
 python scripts/create_user.py
 ```
 
-Eso crea las tablas que falten, el usuario del primer login
-(`admin@atechcol.com` / `admin123`) y datos de prueba para poder navegar el panel.
-Es idempotente: se puede correr varias veces sin duplicar nada.
+Eso crea las tablas que falten, agrega `created_at` a la tabla `client` si hace
+falta, y crea el usuario del primer login (`tu_correo@admin.com` / `admin`)
+y datos de prueba para poder navegar el panel. Es idempotente: se puede correr
+varias veces sin duplicar nada.
 
 Opciones útiles:
 
@@ -82,6 +83,54 @@ la app arranca igual pero las sesiones se cierran en cada reinicio:
 ```bash
 python -c "import secrets; print(secrets.token_urlsafe(48))"
 ```
+
+Para enviar los datos del certificado desde **Clientes → Acciones → Detalles →
+Enviar detalles por correo**, se solicita el destinatario, asunto y un mensaje
+adicional opcional en cada envío. El formulario muestra los datos del cliente y
+su certificado que se incluirán en el correo. El servidor vuelve a obtener esos
+datos al enviar; no se adjunta ni se envía el archivo PFX o su contraseña.
+
+Configura el `.env` local con los datos SMTP. El ejemplo de este proyecto usa
+`tu_correo@admin.com` por el puerto `465`, con `SMTP_USE_SSL=true` y
+`SMTP_STARTTLS=false`. Completa `SMTP_USERNAME`, `SMTP_PASSWORD` y
+`SMTP_FROM_EMAIL` con los valores de tu cuenta. No guardes contraseñas ni otros
+secretos en archivos versionados.
+
+### Alertas automáticas de vencimiento de certificados
+
+El comando `scripts/check_certificate_expiry.py` revisa todos los certificados
+cargados, incluidos los de clientes inactivos, y envía un correo por cada
+certificado vencido o que venza dentro de los próximos 30 días. Si sigue
+vencido o próximo a vencer, se notificará de nuevo en cada revisión hasta que
+se reemplace el certificado por uno vigente. Cuando haya varios clientes para
+notificar, el proceso espera cinco segundos entre cada correo.
+
+Define `CERTIFICATE_ALERT_RECIPIENTS` en el `.env` con las direcciones separadas
+por comas. Los destinatarios se envían en copia oculta. Para revisar a las
+08:00, 13:00 y 18:00, hora de Colombia, agrega este cron al servidor Linux:
+
+```cron
+CRON_TZ=America/Bogota
+0 8,13,18 * * * cd /ruta/al/proyecto && .venv/bin/python scripts/check_certificate_expiry.py >> /var/log/dian-api-certificate-alerts.log 2>&1
+```
+
+Antes de instalarlo, reemplaza `/ruta/al/proyecto` en
+[`deploy/certificate-expiry.cron`](./deploy/certificate-expiry.cron) por la ruta
+real del despliegue. El usuario de cron debe tener acceso al entorno con las
+dependencias, al `.env`, a la base de datos y al directorio compartido con los
+PFX. Luego instala la tarea en el servidor:
+
+```bash
+crontab deploy/certificate-expiry.cron
+crontab -l
+```
+
+El archivo del repositorio es una plantilla: no instala ni activa el cron por
+sí solo. Cada ejecución envía un aviso por certificado que cumpla el criterio;
+si sigue vencido o próximo a vencer, lo vuelve a notificar en la siguiente
+revisión. Cuando hay varios certificados, espera cinco segundos entre correos.
+Para ejecutar una revisión manualmente, desde la raíz del proyecto y con el
+`.env` configurado, ejecuta `python scripts/check_certificate_expiry.py`.
 
 Después, levantar la API y entrar a `http://localhost:8000/login`.
 

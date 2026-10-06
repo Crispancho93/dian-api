@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from typing import Optional
 
 from pydantic import BaseModel
@@ -27,6 +28,9 @@ class ClientAdminDto(BaseModel):
     full_name: str
     pfx_path: Optional[str] = None
     is_active: bool = True
+    fecha_vencimiento_certificado: Optional[date] = None
+    created_at: Optional[datetime] = None
+    nombre_certificado: Optional[str] = None
 
     @property
     def tiene_certificado(self) -> bool:

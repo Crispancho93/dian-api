@@ -116,11 +116,30 @@ def crear_tablas():
 
     meta.create_all(engine, tables=tablas)
 
+    asegurar_fecha_creacion_cliente()
+
     for tabla in tablas:
         estado = "ya existía" if tabla.name in existentes else "CREADA"
         print(f"  {tabla.name:<10} {estado}")
 
     asegurar_relacion_cliente_documento()
+
+
+def asegurar_fecha_creacion_cliente():
+    """Añade la fecha de creación a tablas client existentes que no la tengan."""
+    from sqlalchemy import inspect
+
+    columnas = {columna["name"] for columna in inspect(engine).get_columns("client")}
+    if "created_at" in columnas:
+        return
+
+    with get_connection() as conn:
+        conn.execute(text(
+            "ALTER TABLE client ADD COLUMN created_at "
+            "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP"
+        ))
+        conn.commit()
+    print("  client.created_at creada")
 
 
 def asegurar_relacion_cliente_documento():

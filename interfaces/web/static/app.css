@@ -213,6 +213,7 @@ button:hover, .btn:hover { background: var(--accent-dark); text-decoration: none
 
 .client-actions-heading,
 .client-actions-cell { text-align: right !important; }
+.table tbody tr.client-actions-open { position: relative; z-index: 5; }
 .client-actions-menu {
     position: relative;
     display: inline-block;
@@ -246,31 +247,116 @@ button:hover, .btn:hover { background: var(--accent-dark); text-decoration: none
     border-color: var(--border);
     color: var(--text);
 }
-.client-actions-menu form {
+.client-actions-popover {
     position: absolute;
     top: calc(100% + 4px);
     right: 0;
     z-index: 10;
-    min-width: 96px;
-    padding: 2px;
+    min-width: 190px;
+    padding: 6px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
     box-shadow: 0 8px 20px rgba(15, 23, 42, .14);
 }
-.client-actions-menu form button {
+.client-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     width: 100%;
-    padding: 5px 7px;
+    padding: 9px 10px;
     border: 0;
+    border-radius: 5px;
+    color: var(--text);
     background: transparent;
-    color: var(--err);
     text-align: left;
-    font-size: 12px;
+    font-size: 13px;
+    cursor: pointer;
 }
-.client-actions-menu form button:hover {
+.client-menu-item:hover { background: #f4f6f8; }
+.client-menu-icon {
+    display: inline-grid;
+    flex: 0 0 24px;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+.client-actions-popover form { margin: 0; }
+.client-actions-popover form .client-menu-delete {
+    color: var(--err);
+}
+.client-menu-delete .client-menu-icon {
+    background: var(--err-bg);
+    color: var(--err);
+}
+.client-actions-popover form .client-menu-delete:hover {
     background: var(--err-bg);
 }
-
+.client-details-dialog {
+    width: min(92vw, 620px);
+    max-height: 85vh;
+    margin: auto;
+    padding: 26px;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, .24);
+}
+.client-details-dialog::backdrop { background: rgba(15, 23, 42, .48); }
+.client-dialog-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+.client-dialog-head h2 { margin: 0; font-size: 21px; }
+.client-dialog-head .eyebrow {
+    margin: 0 0 4px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+.client-dialog-head .muted { margin: 4px 0 0; }
+.dialog-close {
+    display: grid;
+    flex: 0 0 34px;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: var(--muted);
+    font-size: 22px;
+}
+.dialog-close:hover { background: #e8edf3; color: var(--text); }
+.client-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+}
+.client-detail-grid > div {
+    min-width: 0;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #fafbfc;
+}
+.client-detail-grid .client-detail-wide { grid-column: 1 / -1; }
+.client-detail-grid dt { color: var(--muted); font-size: 12px; }
+.client-detail-grid dd { margin: 5px 0 0; font-weight: 600; overflow-wrap: anywhere; }
 /* ---------- Tablas ---------- */
 .table {
     width: 100%;
@@ -327,7 +413,7 @@ pre.messages, pre.raw {
     max-height: 420px;
     overflow: auto;
 }
-details summary { cursor: pointer; color: var(--accent); margin-bottom: 10px; }
+details:not(.client-actions-menu) summary { cursor: pointer; color: var(--accent); margin-bottom: 10px; }
 
 .pagination { display: flex; gap: 16px; align-items: center; justify-content: center; padding: 18px; color: var(--muted); }
 
@@ -456,6 +542,13 @@ details summary { cursor: pointer; color: var(--accent); margin-bottom: 10px; }
     .table tbody tr td:last-child {
         border-bottom: none;
     }
+
+    .client-actions-cell { position: relative; z-index: 2; }
+    .client-actions-popover { top: 38px; }
+
+    .client-details-dialog { padding: 20px; }
+    .client-detail-grid { grid-template-columns: 1fr; }
+    .client-detail-grid .client-detail-wide { grid-column: auto; }
 
     .table tbody tr td.client-actions-cell {
         justify-content: space-between;

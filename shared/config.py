@@ -30,6 +30,15 @@ class Config(BaseSettings):
     # configura, se genera una aleatoria al arrancar y las sesiones abiertas se
     # invalidan en cada reinicio.
     SECRET_KEY: str | None = None
+    SMTP_HOST: str | None = None
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str | None = None
+    SMTP_PASSWORD: str | None = None
+    SMTP_FROM_EMAIL: str | None = None
+    SMTP_STARTTLS: bool = True
+    SMTP_USE_SSL: bool = False
+    CERTIFICATE_ALERT_RECIPIENTS: str | None = None
+
     class Config:
         env_file = _ENV_FILE
         env_file_encoding = 'utf-8'

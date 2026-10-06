@@ -1,0 +1,2 @@
+CRON_TZ=America/Bogota
+0 8,13,18 * * * cd /ruta/al/proyecto && /ruta/al/proyecto/.venv/bin/python scripts/check_certificate_expiry.py >> /var/log/dian-api-certificate-alerts.log 2>&1

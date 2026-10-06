@@ -1,4 +1,6 @@
 from urllib.parse import quote_plus
+import logging
+import smtplib
 
 from fastapi import APIRouter, Request, Depends, Form, File, UploadFile, Query
 from fastapi.responses import RedirectResponse
@@ -7,10 +9,15 @@ from application.use_cases.client.list_clients_case import ListClientsCase, GetC
 from application.use_cases.client.save_client_case import SaveClientCase
 from application.use_cases.client.save_certificate_case import SaveCertificateCase
 from application.use_cases.client.delete_client_case import DeleteClientCase
+from application.use_cases.client.send_client_email_case import SendClientEmailCase
+from application.use_cases.client.get_client_certificate_details_case import (
+    GetClientCertificateDetailsCase,
+)
 from ..deps import require_login
 from ..templating import render
 
 router = APIRouter(prefix="/clientes", tags=["web"])
+logger = logging.getLogger(__name__)
 
 
 @router.get("")
@@ -131,6 +138,77 @@ def delete_client(client_id: int, user=Depends(require_login)):
 
     return RedirectResponse(
         url="/clientes?mensaje=Cliente+eliminado", status_code=303
+    )
+
+
+@router.post("/{client_id}/enviar-correo")
+def send_client_email(
+    client_id: int,
+    destinatario: str = Form(...),
+    asunto: str = Form(...),
+    mensaje: str = Form(""),
+    user=Depends(require_login),
+):
+    """Envía por SMTP los datos del cliente y su certificado al destinatario."""
+    try:
+        cliente = GetClientCertificateDetailsCase(client_id).execute()
+    except LookupError:
+        return RedirectResponse(
+            url="/clientes?error=El+cliente+no+existe", status_code=303
+        )
+    except (OSError, ValueError):
+        logger.exception(
+            "No se pudieron leer los datos del certificado del cliente %s", client_id
+        )
+        return RedirectResponse(
+            url="/clientes?error=No+se+pudieron+leer+los+detalles+del+certificado.",
+            status_code=303,
+        )
+
+    nit = cliente.nit + (f"-{cliente.digito}" if cliente.digito else "")
+    fecha_creacion = (
+        cliente.created_at.strftime("%d/%m/%Y")
+        if cliente.created_at
+        else "No disponible"
+    )
+    fecha_vencimiento = (
+        cliente.fecha_vencimiento_certificado.strftime("%d/%m/%Y")
+        if cliente.fecha_vencimiento_certificado
+        else "No disponible"
+    )
+    cuerpo = (
+        "Detalles del cliente y su certificado\n\n"
+        f"Razón social: {cliente.full_name}\n"
+        f"NIT: {nit}\n"
+        f"Resolución: {cliente.resolucion}\n"
+        f"Fecha de creación del cliente: {fecha_creacion}\n"
+        f"Titular del certificado: {cliente.nombre_certificado or 'No disponible'}\n"
+        f"Vencimiento del certificado: {fecha_vencimiento}\n"
+        f"Estado del cliente: {'Activo' if cliente.is_active else 'Inactivo'}\n"
+        f"Certificado: {'Cargado' if cliente.tiene_certificado else 'Sin certificado'}\n"
+    )
+    if mensaje.strip():
+        cuerpo += f"\nMensaje adicional:\n{mensaje.strip()}\n"
+
+    try:
+        SendClientEmailCase(
+            recipient=destinatario,
+            subject=asunto,
+            body=cuerpo,
+        ).execute()
+    except ValueError as error:
+        return RedirectResponse(
+            url=f"/clientes?error={quote_plus(str(error))}", status_code=303
+        )
+    except (smtplib.SMTPException, OSError):
+        logger.exception("No se pudo enviar el correo para el cliente %s", client_id)
+        return RedirectResponse(
+            url="/clientes?error=No+se+pudo+enviar+el+correo.+Revise+la+configuracion+SMTP.",
+            status_code=303,
+        )
+
+    return RedirectResponse(
+        url="/clientes?mensaje=Correo+enviado+correctamente", status_code=303
     )
 
 

@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, Boolean, text
+from sqlalchemy import Table, Column, Integer, String, Boolean, DateTime, func, text
 
 from .db import meta
 
@@ -22,4 +22,5 @@ client = Table(
     Column("pfx_password", String(500), nullable=False, doc="Contraseña del certificado PFX (encriptada)."),
     Column("pfx_path", String(500), nullable=False, doc="Ruta del archivo PFX del cliente."),
     Column("is_active", Boolean, nullable=False, server_default=text("TRUE"), doc="Estado del cliente."),
+    Column("created_at", DateTime, nullable=False, server_default=func.now(), doc="Fecha de creación."),
 )

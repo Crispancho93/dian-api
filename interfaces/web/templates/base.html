@@ -82,8 +82,43 @@
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
                 pendingDeleteForm = form;
+                const actionMenu = form.closest('.client-actions-menu');
+                if (actionMenu) actionMenu.open = false;
                 modal.hidden = false;
                 cancelDelete.focus();
+            });
+        });
+
+        document.querySelectorAll('[data-open-client-details]').forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                event.stopPropagation();
+                const detailsDialog = document.getElementById(button.dataset.dialogId);
+                const actionMenu = button.closest('.client-actions-menu');
+                if (actionMenu) actionMenu.open = false;
+                if (detailsDialog) detailsDialog.showModal();
+            });
+        });
+
+        document.querySelectorAll('[data-close-dialog]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                button.closest('dialog').close();
+            });
+        });
+        document.querySelectorAll('dialog').forEach(function (dialog) {
+            dialog.addEventListener('click', function (event) {
+                event.stopPropagation();
+                if (event.target === dialog) dialog.close();
+            });
+        });
+        document.querySelectorAll('.client-actions-menu').forEach(function (menu) {
+            menu.addEventListener('toggle', function () {
+                const row = menu.closest('tr');
+                if (row) row.classList.toggle('client-actions-open', menu.open);
+                if (menu.open) {
+                    document.querySelectorAll('.client-actions-menu[open]').forEach(function (otherMenu) {
+                        if (otherMenu !== menu) otherMenu.open = false;
+                    });
+                }
             });
         });
 
@@ -108,6 +143,9 @@
             if (event.key !== 'Escape') return;
             if (modal && !modal.hidden) closeDeleteModal();
             if (errorModal && !errorModal.hidden) errorModal.hidden = true;
+            document.querySelectorAll('.client-details-dialog[open]').forEach(function (dialog) {
+                dialog.close();
+            });
         });
     });
 </script>

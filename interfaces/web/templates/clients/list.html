@@ -27,6 +27,7 @@
             <th>NIT</th>
             <th>Resolución</th>
             <th>Certificado</th>
+            <th>Vencimiento del certificado</th>
             <th>Estado</th>
             <th class="client-actions-heading">Acciones</th>
         </tr>
@@ -44,6 +45,13 @@
                 <span class="badge badge-error">Sin certificado</span>
                 {% endif %}
             </td>
+            <td data-label="Vencimiento del certificado">
+                {% if cliente.fecha_vencimiento_certificado %}
+                {{ cliente.fecha_vencimiento_certificado.strftime("%d/%m/%Y") }}
+                {% else %}
+                <span class="muted">—</span>
+                {% endif %}
+            </td>
             <td>
                 {% if cliente.is_active %}
                 <span class="badge badge-aceptado">Activo</span>
@@ -56,10 +64,53 @@
                     <summary aria-label="Acciones para {{ cliente.full_name }}" title="Acciones">
                         <span></span><span></span><span></span>
                     </summary>
-                    <form method="post" action="/clientes/{{ cliente.id }}/eliminar" data-confirm-delete>
-                        <button type="submit">Eliminar</button>
-                    </form>
+                    <div class="client-actions-popover">
+                        <button class="client-menu-item" type="button"
+                                data-open-client-details data-dialog-id="client-details-{{ cliente.id }}"
+                                aria-haspopup="dialog" aria-controls="client-details-{{ cliente.id }}">
+                            <span class="client-menu-icon" aria-hidden="true">i</span>Detalles
+                        </button>
+                        <form method="post" action="/clientes/{{ cliente.id }}/eliminar" data-confirm-delete>
+                            <button class="client-menu-item client-menu-delete" type="submit">
+                                <span class="client-menu-icon" aria-hidden="true">×</span>Eliminar
+                            </button>
+                        </form>
+                    </div>
                 </details>
+                <dialog class="client-details-dialog" id="client-details-{{ cliente.id }}"
+                        aria-labelledby="client-details-title-{{ cliente.id }}">
+                    <div class="client-dialog-head">
+                        <div>
+                            <p class="eyebrow">Información del cliente</p>
+                            <h2 id="client-details-title-{{ cliente.id }}">{{ cliente.full_name }}</h2>
+                        </div>
+                        <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar">×</button>
+                    </div>
+                    <dl class="client-detail-grid">
+                        <div><dt>NIT</dt><dd>{{ cliente.nit }}{% if cliente.digito %}-{{ cliente.digito }}{% endif %}</dd></div>
+                        <div><dt>Resolución</dt><dd>{{ cliente.resolucion }}</dd></div>
+                        <div>
+                            <dt>Fecha de creación</dt>
+                            <dd>{{ cliente.created_at.strftime("%d/%m/%Y") if cliente.created_at else "No disponible" }}</dd>
+                        </div>
+                        <div>
+                            <dt>Vencimiento del certificado</dt>
+                            <dd>{{ cliente.fecha_vencimiento_certificado.strftime("%d/%m/%Y") if cliente.fecha_vencimiento_certificado else "No disponible" }}</dd>
+                        </div>
+                        <div class="client-detail-wide">
+                            <dt>Titular del certificado</dt>
+                            <dd>{{ cliente.nombre_certificado or "No disponible" }}</dd>
+                        </div>
+                        <div>
+                            <dt>Estado</dt>
+                            <dd>{{ "Activo" if cliente.is_active else "Inactivo" }}</dd>
+                        </div>
+                        <div>
+                            <dt>Certificado</dt>
+                            <dd>{{ "Cargado" if cliente.tiene_certificado else "Sin certificado" }}</dd>
+                        </div>
+                    </dl>
+                </dialog>
             </td>
         </tr>
         {% endfor %}
@@ -73,7 +124,7 @@
     <section class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="error-title">
         <div class="confirm-icon error-icon" aria-hidden="true">!</div>
         <div class="confirm-copy">
-            <h2 id="error-title">No se puede eliminar el cliente</h2>
+            <h2 id="error-title">No se pudo completar la acción</h2>
             <p>{{ error_modal }}</p>
         </div>
         <div class="confirm-actions">
